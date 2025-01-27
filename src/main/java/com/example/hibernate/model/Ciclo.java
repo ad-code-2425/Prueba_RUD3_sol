@@ -15,18 +15,18 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="cicloformativo"
 )
-public class Cicloformativo  implements java.io.Serializable {
+public class Ciclo  implements java.io.Serializable {
 
 
      private Integer idCiclo;
-     private String nombreCiclo;
+     private String nombre;
      private Integer horas;
 
-    public Cicloformativo() {
+    public Ciclo() {
     }
 
-    public Cicloformativo(String nombreCiclo, Integer horas) {
-       this.nombreCiclo = nombreCiclo;
+    public Ciclo(String nombreCiclo, Integer horas) {
+       this.nombre = nombreCiclo;
        this.horas = horas;
     }
    
@@ -44,12 +44,12 @@ public class Cicloformativo  implements java.io.Serializable {
 
     
     @Column(name="nombreCiclo", length=100)
-    public String getNombreCiclo() {
-        return this.nombreCiclo;
+    public String getNombre() {
+        return this.nombre;
     }
     
-    public void setNombreCiclo(String nombreCiclo) {
-        this.nombreCiclo = nombreCiclo;
+    public void setNombre(String nombreCiclo) {
+        this.nombre = nombreCiclo;
     }
 
     
@@ -60,6 +60,11 @@ public class Cicloformativo  implements java.io.Serializable {
     
     public void setHoras(Integer horas) {
         this.horas = horas;
+    }
+
+    @Override
+    public String toString() {
+        return "CicloFormativo [idCiclo=" + idCiclo + ", nombreCiclo=" + nombre + ", horas=" + horas + "]";
     }
 
 

@@ -3,9 +3,9 @@ package com.example.hibernate.util;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.service.ServiceRegistry;
 
-import com.example.hibernate.model.Cicloformativo;
+
+import com.example.hibernate.model.Ciclo;
 import com.example.hibernate.model.Comunidadautonoma;
 import com.example.hibernate.model.Direccion;
 import com.example.hibernate.model.Modulo;
@@ -35,7 +35,7 @@ public class HibernateUtil {
                   .addAnnotatedClass(Modulo.class)
                   .addAnnotatedClass(Comunidadautonoma.class)
                   .addAnnotatedClass(Direccion.class)
-                  .addAnnotatedClass(Cicloformativo.class)
+                  .addAnnotatedClass(Ciclo.class)
                     .buildMetadata()
                     .buildSessionFactory();
         } catch (Exception ex) {
