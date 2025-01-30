@@ -7,6 +7,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import com.example.hibernate.model.Ciclo;
 import com.example.hibernate.model.Comunidadautonoma;
+import com.example.hibernate.model.ContactInfo;
 import com.example.hibernate.model.Direccion;
 import com.example.hibernate.model.Modulo;
 import com.example.hibernate.model.Profesor;
@@ -35,7 +36,8 @@ public class HibernateUtil {
                   .addAnnotatedClass(Modulo.class)
                   .addAnnotatedClass(Comunidadautonoma.class)
                   .addAnnotatedClass(Direccion.class)
-                  .addAnnotatedClass(Ciclo.class)
+                    .addAnnotatedClass(Ciclo.class)
+                  .addAnnotatedClass(ContactInfo.class)
                     .buildMetadata()
                     .buildSessionFactory();
         } catch (Exception ex) {

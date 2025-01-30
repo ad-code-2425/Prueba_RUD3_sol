@@ -1,5 +1,5 @@
 package com.example.hibernate.model;
-// Generated 23 ene 2025, 16:27:48 by Hibernate Tools 6.6.0.Final
+// Generated 30 ene 2025, 17:49:46 by Hibernate Tools 6.6.0.Final
 
 
 import jakarta.persistence.Column;

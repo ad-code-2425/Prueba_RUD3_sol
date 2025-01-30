@@ -19,7 +19,7 @@ import com.example.hibernate.model.Profesor;
 import com.example.hibernate.util.HibernateUtil;
 import com.example.hibernate.util.ProfesorInfo;
 
-public class Main {
+public class Main2 {
         public static void main(String[] args) {
                 // Get the singleton instance of HibernateUtil
                 HibernateUtil hibernateUtil = HibernateUtil.getInstance();
@@ -308,5 +308,18 @@ public class Main {
                         }
                 }
 
+                {
+                        System.out.println("----------- Q20: OneToOne con PK iguales -----------");
+
+                        List<Profesor> profes = session.createSelectionQuery(
+                                        "SELECT p from Profesor p",
+                                        Profesor.class)
+                                        .getResultList();
+
+                        for (Profesor profe : profes) {
+                                System.out.println(" Datos profe: " + profe + " ContactInfo: "
+                                                + profe.getContactInfo().getTlfMovil());
+                        }
+                }
         }
 }
