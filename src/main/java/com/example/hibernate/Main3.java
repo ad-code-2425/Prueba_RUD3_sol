@@ -19,7 +19,7 @@ import com.example.hibernate.model.Profesor;
 import com.example.hibernate.util.HibernateUtil;
 import com.example.hibernate.util.ProfesorInfo;
 
-public class Main2 {
+public class Main3 {
         public static void main(String[] args) {
                 // Get the singleton instance of HibernateUtil
                 HibernateUtil hibernateUtil = HibernateUtil.getInstance();

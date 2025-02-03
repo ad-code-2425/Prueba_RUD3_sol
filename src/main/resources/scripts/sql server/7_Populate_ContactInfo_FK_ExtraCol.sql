@@ -26,7 +26,7 @@ BEGIN
 	OPEN cursor_profesor  
 
 		FETCH NEXT FROM cursor_profesor INTO @profeId
-		-- valor 0 :  	La instrucción FETCH se ejecutó correctamente.
+		-- valor 0 :  	La instrucciï¿½n FETCH se ejecutï¿½ correctamente.
 		IF @@FETCH_STATUS <> 0   
 		PRINT '         Hubo un error recuperando datos del cursor'    
 		
