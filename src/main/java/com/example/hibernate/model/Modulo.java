@@ -80,7 +80,15 @@ public class Modulo  implements java.io.Serializable {
     }
 
 
+    public void addProfesor(Profesor profe) {
 
+        getProfesors().add(profe);
+        
+        //conviene  usar getProfesors() en lugar de this.profesors para forzar las inicializaciones de los objetos proxy en caso de inicialización //lazy
+        
+        profe.getModulos().add(this);
+        
+        }
 
 }
 

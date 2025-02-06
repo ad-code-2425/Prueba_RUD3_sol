@@ -23,7 +23,7 @@ public class Provincia  implements java.io.Serializable {
 
 
      private int idProvincia;
-     private Comunidadautonoma comunidadautonoma;
+     private ComunidadAutonoma comunidadautonoma;
      private String nombre;
      private Set<Direccion> direccions = new HashSet<Direccion>(0);
 
@@ -31,11 +31,11 @@ public class Provincia  implements java.io.Serializable {
     }
 
 	
-    public Provincia(int idProvincia, Comunidadautonoma comunidadautonoma) {
+    public Provincia(int idProvincia, ComunidadAutonoma comunidadautonoma) {
         this.idProvincia = idProvincia;
         this.comunidadautonoma = comunidadautonoma;
     }
-    public Provincia(int idProvincia, Comunidadautonoma comunidadautonoma, String nombre, Set<Direccion> direccions) {
+    public Provincia(int idProvincia, ComunidadAutonoma comunidadautonoma, String nombre, Set<Direccion> direccions) {
        this.idProvincia = idProvincia;
        this.comunidadautonoma = comunidadautonoma;
        this.nombre = nombre;
@@ -56,11 +56,11 @@ public class Provincia  implements java.io.Serializable {
 
 @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="idCA", nullable=false)
-    public Comunidadautonoma getComunidadautonoma() {
+    public ComunidadAutonoma getComunidadautonoma() {
         return this.comunidadautonoma;
     }
     
-    public void setComunidadautonoma(Comunidadautonoma comunidadautonoma) {
+    public void setComunidadautonoma(ComunidadAutonoma comunidadautonoma) {
         this.comunidadautonoma = comunidadautonoma;
     }
 
