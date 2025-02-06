@@ -24,7 +24,12 @@ import java.util.Set;
 public class Modulo  implements java.io.Serializable {
 
 
-     private Integer idModulo;
+     @Override
+    public String toString() {
+        return "Modulo [idModulo=" + idModulo + ", nombre=" + nombre + "]";
+    }
+
+    private Integer idModulo;
      private String nombre;
      private Set<Profesor> profesors = new HashSet<Profesor>(0);
 

@@ -94,6 +94,12 @@ public class Direccion  implements java.io.Serializable {
     }
 
 
+    @Override
+    public String toString() {
+        return "Direccion [id=" + id + ", calle=" + calle + ", numero=" + numero + ", poblacion=" + poblacion + "]";
+    }
+
+
 
 
 }
