@@ -319,5 +319,7 @@ public class Main3 {
                                                 + profe.getContactInfo().getTlfMovil());
                         }
                 }
-        }
+                session.close();
+                sessionFactory.close();
+            }
 }
