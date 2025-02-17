@@ -57,7 +57,7 @@ public class ComunidadAutonoma implements java.io.Serializable {
         this.nombre = nombre;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comunidadAutonoma",  cascade ={CascadeType.PERSIST, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comunidadAutonoma",  cascade = CascadeType.REMOVE)
     public Set<Provincia> getProvincias() {
         return this.provincias;
     }

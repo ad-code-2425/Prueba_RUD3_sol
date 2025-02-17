@@ -6,6 +6,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -103,7 +104,7 @@ public class Profesor implements java.io.Serializable {
         this.tipoFuncionario = tipoFuncionario;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "profesor")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "profesor", cascade = CascadeType.REMOVE)
     public ContactInfo getContactInfo() {
         return this.contactInfo;
     }
