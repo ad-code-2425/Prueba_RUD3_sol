@@ -12,12 +12,18 @@ import com.example.hibernate.model.util.exceptions.InstanceNotFoundException;
 import com.example.hibernate.util.HibernateUtil;
 
 /**
+ * Implementación xenérica do DAO en Hibernate.
  *
  * @author maria
  */
 public class GenericDaoHibernate<E, PK extends Serializable> implements IGenericDao<E, PK> {
 
-	// getClass(): accedemos a la clase de la instancia que extienda esta clase
+    private final Class<E> entityClass;
+    private final SessionFactory sessionFactory;
+
+    @SuppressWarnings("unchecked")
+    public GenericDaoHibernate() {
+        	// getClass(): accedemos a la clase de la instancia que extienda esta clase
 	// (será DepartamentoSQLServerDao u XSQLServerDao)
 	// .getGenericSuperclass(): obtenemos el tipo de la clase madre directa:
 	// GenericDaoHibernate En el caso de que sea una clase parametrizada (con
@@ -27,162 +33,87 @@ public class GenericDaoHibernate<E, PK extends Serializable> implements IGeneric
 	// que se le pasan al tipo parametrizado <E, PK>
 	// finalmente obtenemos el nombre del tipo parametrizado: <E> que será
 	// Departamento (o empleado cuando se implemente)
+        this.entityClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass())
+                .getActualTypeArguments()[0];
 
-	private Class<E> entityClass;
-
-	private HibernateUtil hibernateUtil;
-	private SessionFactory sessionFactory;
-
-	@SuppressWarnings("unchecked")
-	public GenericDaoHibernate() {
-		this.entityClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass())
-				.getActualTypeArguments()[0];
-
-		this.hibernateUtil = HibernateUtil.getInstance();
-
-		// Retrieve the SessionFactory
-		this.sessionFactory = hibernateUtil.getSessionFactory();
-
-	}
+        this.sessionFactory = HibernateUtil.getInstance().getSessionFactory();
+    }
 
 	protected Session getSession() {
-		return this.sessionFactory.getCurrentSession();
+		return sessionFactory.getCurrentSession();
 	}
 
-	public void save(E entity) {
+	
+	/**
+	 * 
+	 * @param <R>       Tipo de retorno da operación.
+	 * @param operacion Función que recibe a sesión e devolve un resultado.
+	 *                  Personalizouse para poder lanzar unha Exception
+	 * @return O resultado da operación.
+	 
+	 */
 
+	 public <R> R executarDentroTransaccion(OperacionHibernate<R> operacion) {
 		Transaction tx = null;
-
+		R resultado = null;
 		try {
-			tx = getSession().beginTransaction();
-
-			getSession().persist(entity);
-
+			Session session = getSession();
+			tx = session.beginTransaction();
+			resultado = operacion.executar();
 			tx.commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 			}
-		} finally {
-			if (this.getSession() != null) {
-				this.getSession().close();
-
-			}
+			throw new RuntimeException("Erro ao executar a operación en Hibernate", ex); // Convértese en unchecked exception
 		}
-
+		return resultado;
 	}
+	
 
-	public E update(E entity) {
+    @Override
+    public void save(E entity) {
+        Session session = getSession();
+        session.persist(entity);
+    }
 
-		E entityMerged = null;
+    @Override
+    public E update(E entity) {
+        Session session = getSession();
+        return session.merge(entity);
+    }
 
-		Transaction tx = null;
+    @Override
+    public boolean exists(PK id) {
+        Session session = getSession();
+        return session.get(entityClass, id) != null;
+    }
 
-		try {
-			tx = getSession().beginTransaction();
+    @Override
+    public E find(PK id) throws InstanceNotFoundException {
+        Session session = getSession();
+        E entity = session.get(entityClass, id);
+        if (entity == null) {
+            throw new InstanceNotFoundException(id, entityClass.getName());
+        }
+        return entity;
+    }
 
-			entityMerged = getSession().merge(entity);
+    @Override
+    public void remove(PK id) throws InstanceNotFoundException {
+        Session session = getSession();
+        E entity = session.get(entityClass, id); 
+        if (entity == null) {
+            throw new InstanceNotFoundException(id, entityClass.getName());
+        }
+        session.remove(entity);
+    }
 
-			tx.commit();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (this.getSession() != null) {
-				this.getSession().close();
-
-			}
-		}
-		return entityMerged;
-
-	}
-
-	public boolean exists(PK id) {
-		E entity = null;
-		Transaction tx = null;
-		try {
-			tx = getSession().beginTransaction();
-			entity = getSession().get(entityClass, id);
-
-			tx.commit();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (this.getSession() != null) {
-				this.getSession().close();
-
-			}
-		}
-		return entity != null;
-	}
-
-	public E find(PK id) throws InstanceNotFoundException {
-		E entity = null;
-		entity = (E) getSession().get(entityClass, id);
-		if (entity == null) {
-			throw new InstanceNotFoundException(id, entityClass.getName());
-		}
-
-		return entity;
-
-	}
-
-	public void remove(PK id) throws InstanceNotFoundException {
-
-		Transaction tx = null;
-
-		try {
-			tx = getSession().beginTransaction();
-
-			getSession().remove(find(id));
-
-			tx.commit();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (this.getSession() != null) {
-				this.getSession().close();
-
-			}
-		}
-
-	}
-
-	@Override
-	public List<E> findAll() {
-		Transaction tx = null;
-		List<E> listado = null;
-		try {
-			tx = getSession().beginTransaction();
-
-			listado = (List<E>) getSession()
-					.createSelectionQuery(" select c FROM " + entityClass.getName() + " c", entityClass)
-					.getResultList();
-
-			tx.commit();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-		} finally {
-			if (this.getSession() != null) {
-				this.getSession().close();
-
-			}
-		}
-
-		return listado;
-
-	}
-
+    @Override
+    public List<E> findAll() {
+        Session session = getSession();
+        return session.createSelectionQuery("SELECT c FROM " + entityClass.getName() + " c", entityClass)
+                .getResultList();
+    }
 }

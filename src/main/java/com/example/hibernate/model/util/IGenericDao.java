@@ -56,11 +56,12 @@ public interface IGenericDao<E, PK extends Serializable> {
      */
     List<E> findAll();
 
-/**
- * Actualiza una entidad del sistema de persistencia
- * @param entidad a actualizar
- * @return entidad actualizada y persistente
- */
-E update(E entity);
+    /**
+     * Actualiza una entidad del sistema de persistencia
+     * @param entidad a actualizar
+     * @return entidad actualizada y persistente
+     */
+    E update(E entity);
 
+    public <R> R executarDentroTransaccion(OperacionHibernate<R> operacion);
 }
