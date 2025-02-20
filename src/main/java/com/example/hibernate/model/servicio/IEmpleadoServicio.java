@@ -2,17 +2,17 @@ package com.example.hibernate.model.servicio;
 
 import java.util.List;
 
-import com.example.hibernate.model.Profesor;
+import com.example.hibernate.model.Empleado;
 import com.example.hibernate.model.util.exceptions.InstanceNotFoundException;
 
-public interface IProfesorServicio {
-    List<Profesor> findAll();
+public interface IEmpleadoServicio {
+    List<Empleado> findAll();
 
     void delete(Integer profeId) throws InstanceNotFoundException;
 
-    void crear(Profesor profe);
+    void crear(Empleado profe);
 
-    void actualizar(Profesor profe);
+    void actualizar(Empleado profe);
 }
 
 
