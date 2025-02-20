@@ -25,12 +25,12 @@ public class Dept  implements java.io.Serializable {
      private Integer deptno;
      private String dname;
      private String loc;
-     private Set<Emp> emps = new HashSet<Emp>(0);
+     private Set<Empleado> emps = new HashSet<Empleado>(0);
 
     public Dept() {
     }
 
-    public Dept(String dname, String loc, Set<Emp> emps) {
+    public Dept(String dname, String loc, Set<Empleado> emps) {
        this.dname = dname;
        this.loc = loc;
        this.emps = emps;
@@ -69,11 +69,11 @@ public class Dept  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="dept")
-    public Set<Emp> getEmps() {
+    public Set<Empleado> getEmps() {
         return this.emps;
     }
     
-    public void setEmps(Set<Emp> emps) {
+    public void setEmps(Set<Empleado> emps) {
         this.emps = emps;
     }
 

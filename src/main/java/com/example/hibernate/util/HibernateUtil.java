@@ -4,15 +4,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-
-import com.example.hibernate.model.Ciclo;
-import com.example.hibernate.model.ComunidadAutonoma;
-import com.example.hibernate.model.ContactInfo;
-import com.example.hibernate.model.Direccion;
-import com.example.hibernate.model.Modulo;
-import com.example.hibernate.model.Profesor;
-import com.example.hibernate.model.Provincia;
-import com.example.hibernate.model.Tiposbasicos;
+import com.example.hibernate.model.AccMovement;
+import com.example.hibernate.model.Account;
+import com.example.hibernate.model.Dept;
+import com.example.hibernate.model.Empleado;
+import com.example.hibernate.model.Project;
 
 public class HibernateUtil {
 
@@ -30,14 +26,12 @@ public class HibernateUtil {
 
             // Build SessionFactory using the service registry
             sessionFactory = new org.hibernate.boot.MetadataSources(serviceRegistry)
-                  .addAnnotatedClass(Profesor.class)
-                  .addAnnotatedClass(Tiposbasicos.class)
-                  .addAnnotatedClass(Provincia.class)
-                  .addAnnotatedClass(Modulo.class)
-                  .addAnnotatedClass(ComunidadAutonoma.class)
-                  .addAnnotatedClass(Direccion.class)
-                    .addAnnotatedClass(Ciclo.class)
-                  .addAnnotatedClass(ContactInfo.class)
+                  .addAnnotatedClass(Account.class)
+                  .addAnnotatedClass(AccMovement.class)
+                  .addAnnotatedClass(Dept.class)
+                  .addAnnotatedClass(Empleado.class)
+                  .addAnnotatedClass(Project.class)
+                  
                     .buildMetadata()
                     .buildSessionFactory();
         } catch (Exception ex) {

@@ -1,6 +1,7 @@
 package com.example.hibernate;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Window;
@@ -15,9 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import modelo.Account;
-
-import java.awt.Color;
+import com.example.hibernate.model.Account;
 
 public class CreateUpdateAccountDialog extends JDialog {
 

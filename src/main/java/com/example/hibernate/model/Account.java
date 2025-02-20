@@ -2,6 +2,7 @@ package com.example.hibernate.model;
 // Generated 20 feb 2025, 18:07:51 by Hibernate Tools 6.6.0.Final
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,7 +27,7 @@ public class Account  implements java.io.Serializable {
 
 
      private Integer accountno;
-     private Emp emp;
+     private Empleado emp;
      private BigDecimal amount;
      private Set<AccMovement> accMovementsForAccountDestId = new HashSet<AccMovement>(0);
      private Set<AccMovement> accMovementsForAccountOriginId = new HashSet<AccMovement>(0);
@@ -35,11 +36,11 @@ public class Account  implements java.io.Serializable {
     }
 
 	
-    public Account(Emp emp, BigDecimal amount) {
+    public Account(Empleado emp, BigDecimal amount) {
         this.emp = emp;
         this.amount = amount;
     }
-    public Account(Emp emp, BigDecimal amount, Set<AccMovement> accMovementsForAccountDestId, Set<AccMovement> accMovementsForAccountOriginId) {
+    public Account(Empleado emp, BigDecimal amount, Set<AccMovement> accMovementsForAccountDestId, Set<AccMovement> accMovementsForAccountOriginId) {
        this.emp = emp;
        this.amount = amount;
        this.accMovementsForAccountDestId = accMovementsForAccountDestId;
@@ -60,11 +61,11 @@ public class Account  implements java.io.Serializable {
 
 @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="EMPNO", nullable=false)
-    public Emp getEmp() {
+    public Empleado getEmp() {
         return this.emp;
     }
     
-    public void setEmp(Emp emp) {
+    public void setEmp(Empleado emp) {
         this.emp = emp;
     }
 
@@ -78,7 +79,7 @@ public class Account  implements java.io.Serializable {
         this.amount = amount;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="accountByAccountDestId")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="accountByAccountDestId", cascade = CascadeType.REMOVE)
     public Set<AccMovement> getAccMovementsForAccountDestId() {
         return this.accMovementsForAccountDestId;
     }
@@ -87,13 +88,19 @@ public class Account  implements java.io.Serializable {
         this.accMovementsForAccountDestId = accMovementsForAccountDestId;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="accountByAccountOriginId")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="accountByAccountOriginId", cascade =  CascadeType.REMOVE)
     public Set<AccMovement> getAccMovementsForAccountOriginId() {
         return this.accMovementsForAccountOriginId;
     }
     
     public void setAccMovementsForAccountOriginId(Set<AccMovement> accMovementsForAccountOriginId) {
         this.accMovementsForAccountOriginId = accMovementsForAccountOriginId;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Account [accountno=" + accountno + ", amount=" + amount + "]";
     }
 
 

@@ -15,30 +15,25 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import modelo.AccMovement;
-import modelo.Account;
-
+import com.example.hibernate.model.AccMovement;
+import com.example.hibernate.model.Account;
 import com.example.hibernate.model.Empleado;
 import com.example.hibernate.model.servicio.AccountServicio;
-
 import com.example.hibernate.model.servicio.EmpleadoServicio;
 import com.example.hibernate.model.servicio.IAccountServicio;
-
 import com.example.hibernate.model.servicio.IEmpleadoServicio;
-import com.example.hibernate.model.util.exceptions.InstanceNotFoundException;
-
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 
 public class AccountWindow extends JFrame {
 
@@ -191,8 +186,8 @@ public class AccountWindow extends JFrame {
 					} else {
 						addMensaje(true, "El número de empleado no es correcto");
 					}
-				} catch (InstanceNotFoundException ex) {
-					addMensaje(true, "El empno " + empno + " no existe");
+				} catch (Exception ex) {
+					addMensaje(true, "El empno " + empno + " no se encontró");
 				}
 			}
 		};
@@ -244,14 +239,11 @@ public class AccountWindow extends JFrame {
 					Account account = (Account) JListAllAccounts.getModel().getElementAt(selectedIx);
 					if (account != null) {
 						try {
-							boolean exito = accountServicio.delete(account.getAccountno());
-							if (exito) {
-								addMensaje(true, "Se ha eliminado la cuenta con id: " + account.getAccountno());
-								getAllAccounts();
-							}
-						} catch (exceptions.InstanceNotFoundException e1) {
-							addMensaje(true, "No se ha podido borrar la cuenta. No se ha encontrado con id: "
-									+ account.getAccountno());
+							accountServicio.delete(account.getAccountno());
+
+							addMensaje(true, "Se ha eliminado la cuenta con id: " + account.getAccountno());
+							getAllAccounts();
+
 						} catch (Exception ex) {
 							addMensaje(true, "No se ha podido borrar la cuenta. ");
 							System.out.println("Exception: " + ex.getMessage());
@@ -275,7 +267,7 @@ public class AccountWindow extends JFrame {
 					textIntroducido = ((JTextField) e.getSource()).getText().trim();
 					try {
 						int accId = Integer.parseInt(textIntroducido);
-//Se guarda en un atributo de la clase
+						// Se guarda en un atributo de la clase
 						AccountWindow.this.empleado = empleadoServicio.find(accId);
 
 						if (empleado != null) {
@@ -287,10 +279,7 @@ public class AccountWindow extends JFrame {
 						addMensaje(true, "Introduzca un número entero");
 						AccountWindow.this.empleado = null;
 
-					} catch (InstanceNotFoundException infe) {
-
-						addMensaje(true, "El empleado: " + textIntroducido + " no existe");
-						AccountWindow.this.empleado = null;
+				
 					} catch (Exception ex) {
 						System.out.println("Ha ocurrido una excepción: " + ex.getMessage());
 						addMensaje(true, "Ha ocurrido un error y no se ha podido recuperar el empleado con id: "
@@ -342,11 +331,11 @@ public class AccountWindow extends JFrame {
 			try {
 				AccMovement movimiento = accountServicio.autoTransferir(cuenta.getAccountno(),
 						diferencia.doubleValue() * (-1));
+				
 				getAllAccounts();
 				addMensaje(true, "Se ha creado el movimiento: " + movimiento);
 
-			} catch (InstanceNotFoundException e) {
-				addMensaje(true, "No se ha encontrado la cuenta con número: " + cuenta.getAccountno());
+		
 			} catch (Exception e2) {
 				addMensaje(true, "No se ha podido modificar la cuenta con número: " + cuenta.getAccountno());
 
@@ -359,13 +348,11 @@ public class AccountWindow extends JFrame {
 
 	private void save(Account cuenta) {
 		try {
-			Account nuevo = accountServicio.saveOrUpdate(cuenta);
-			if (nuevo != null) {
-				addMensaje(true, "Se ha creado una cuenta con id: " + nuevo.getAccountno());
+			 accountServicio.crear(cuenta);
+		
+				addMensaje(true, "Se ha creado una cuenta con id: " + cuenta.getAccountno());
 				getAllAccounts();
-			} else {
-				addMensaje(true, " La cuenta no se ha creado/actualizado correctamente");
-			}
+			
 
 		} catch (Exception ex) {
 			addMensaje(true, "Ha ocurrido un error y no se ha podido crear la cuenta");
