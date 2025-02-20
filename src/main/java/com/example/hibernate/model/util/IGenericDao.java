@@ -22,7 +22,7 @@ public interface IGenericDao<E, PK extends Serializable> {
      * @param entity
      * @return la entidad con la clave primaria asignada
      */
-    public void save(E entity);
+    public void create(E entity);
 
     /***
      * Busca en el sistema de persistencia una entidad por su clave primaria
@@ -54,14 +54,20 @@ public interface IGenericDao<E, PK extends Serializable> {
      * 
      * @return
      */
-    List<E> findAll();
+    public List<E> findAll();
 
     /**
      * Actualiza una entidad del sistema de persistencia
      * @param entidad a actualizar
      * @return entidad actualizada y persistente
      */
-    E update(E entity);
+    public E update(E entity);
 
+    /**
+     * 
+     * @param <R> Tipo de Retorno de operacion
+     * @param operacion operación que implementa la interfaz OperacionHibernate<R>
+     * @return Devuelve un objeto de tipo R genérico
+     */
     public <R> R executarDentroTransaccion(OperacionHibernate<R> operacion);
 }

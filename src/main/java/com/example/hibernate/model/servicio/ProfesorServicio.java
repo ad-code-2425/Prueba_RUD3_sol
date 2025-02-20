@@ -5,7 +5,6 @@ import java.util.List;
 import com.example.hibernate.model.Profesor;
 import com.example.hibernate.model.dao.IProfesorDao;
 import com.example.hibernate.model.dao.ProfesorDaoHibernate;
-import com.example.hibernate.model.util.OperacionHibernate;
 import com.example.hibernate.model.util.exceptions.InstanceNotFoundException;
 
 public class ProfesorServicio implements IProfesorServicio {
@@ -20,16 +19,13 @@ public class ProfesorServicio implements IProfesorServicio {
         List<Profesor> profesores = (List<Profesor>) this.profeDao
                 .executarDentroTransaccion(() -> {
                     return profeDao.findAll();
-                }
-
-                );
+                });
         return profesores;
     }
 
     public void delete(Integer profeId) throws InstanceNotFoundException {
         this.profeDao.executarDentroTransaccion(() -> {
             profeDao.remove(profeId);
-            // añadimos para que devuelva algo
             return null;
         });
     }
@@ -37,7 +33,7 @@ public class ProfesorServicio implements IProfesorServicio {
     @Override
     public void crear(Profesor profe) {
         this.profeDao.executarDentroTransaccion(() -> {
-            this.profeDao.save(profe);
+            this.profeDao.create(profe);
             return null;
         });
     }
@@ -49,6 +45,5 @@ public class ProfesorServicio implements IProfesorServicio {
             return null;
         });
     }
-
 
 }

@@ -23,57 +23,56 @@ public class GenericDaoHibernate<E, PK extends Serializable> implements IGeneric
 
     @SuppressWarnings("unchecked")
     public GenericDaoHibernate() {
-        	// getClass(): accedemos a la clase de la instancia que extienda esta clase
-	// (será DepartamentoSQLServerDao u XSQLServerDao)
-	// .getGenericSuperclass(): obtenemos el tipo de la clase madre directa:
-	// GenericDaoHibernate En el caso de que sea una clase parametrizada (con
-	// Generics),devuelve el tipo del parámetro de tipo E: ParameterizedType:
-	// https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#getGenericSuperclass--
-	// .getActualTypeArguments(): devuelve un array de los tipos de los argumentos
-	// que se le pasan al tipo parametrizado <E, PK>
-	// finalmente obtenemos el nombre del tipo parametrizado: <E> que será
-	// Departamento (o empleado cuando se implemente)
+        // getClass(): accedemos a la clase de la instancia que extienda esta clase
+        // (será ProfesorDaoHibernate u XDaoHibernate)
+        // .getGenericSuperclass(): obtenemos el tipo de la clase madre directa:
+        // GenericDaoHibernate En el caso de que sea una clase parametrizada (con
+        // Generics),devuelve el tipo del parámetro de tipo E: ParameterizedType:
+        // https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#getGenericSuperclass--
+        // .getActualTypeArguments(): devuelve un array de los tipos de los argumentos
+        // que se le pasan al tipo parametrizado <E, PK>
+        // finalmente obtenemos el nombre del tipo parametrizado: <E> que será
+        // Profesor
         this.entityClass = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass())
                 .getActualTypeArguments()[0];
 
         this.sessionFactory = HibernateUtil.getInstance().getSessionFactory();
     }
 
-	protected Session getSession() {
-		return sessionFactory.getCurrentSession();
-	}
+    protected Session getSession() {
+        return sessionFactory.getCurrentSession();
+    }
 
-	
-	/**
-	 * 
-	 * @param <R>       Tipo de retorno da operación.
-	 * @param operacion Función que recibe a sesión e devolve un resultado.
-	 *                  Personalizouse para poder lanzar unha Exception
-	 * @return O resultado da operación.
-	 
-	 */
+    /**
+     * 
+     * @param <R>       Tipo de retorno da operación.
+     * @param operacion Función que recibe a sesión e devolve un resultado.
+     *                  Personalizouse para poder lanzar unha Exception
+     * @return O resultado da operación.
+     * 
+     */
 
-	 public <R> R executarDentroTransaccion(OperacionHibernate<R> operacion) {
-		Transaction tx = null;
-		R resultado = null;
-		try {
-			Session session = getSession();
-			tx = session.beginTransaction();
-			resultado = operacion.executar();
-			tx.commit();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
-			throw new RuntimeException("Erro ao executar a operación en Hibernate", ex); // Convértese en unchecked exception
-		}
-		return resultado;
-	}
-	
+    public <R> R executarDentroTransaccion(OperacionHibernate<R> operacion) {
+        Transaction tx = null;
+        R resultado = null;
+        try {
+            Session session = getSession();
+            tx = session.beginTransaction();
+            resultado = operacion.executar();
+            tx.commit();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw new RuntimeException("Erro ao executar a operación en Hibernate", ex); // Convértese en unchecked
+                                                                                         // exception
+        }
+        return resultado;
+    }
 
     @Override
-    public void save(E entity) {
+    public void create(E entity) {
         Session session = getSession();
         session.persist(entity);
     }
@@ -103,7 +102,7 @@ public class GenericDaoHibernate<E, PK extends Serializable> implements IGeneric
     @Override
     public void remove(PK id) throws InstanceNotFoundException {
         Session session = getSession();
-        E entity = session.get(entityClass, id); 
+        E entity = session.get(entityClass, id);
         if (entity == null) {
             throw new InstanceNotFoundException(id, entityClass.getName());
         }
