@@ -7,7 +7,7 @@ import com.example.hibernate.model.Account;
 
 public interface IAccountServicio {
 
-    public AccMovement autoTransferir(Integer accountno, double nuevoValor);
+    public AccMovement autoTransferir(Integer accountno, double diferencia);
 
     public void crear(Account account);
 
