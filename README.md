@@ -1,4 +1,4 @@
-# H1 Respostas ás preguntas da Tarefa03.1
+# Respostas ás preguntas da Tarefa03.1
 2- mvn clean generate-sources
 14- Engadindo cascade = CascadeType.REMOVE nos getters de Account.java: 
 
