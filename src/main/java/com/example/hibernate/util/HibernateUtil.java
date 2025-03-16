@@ -6,7 +6,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import com.example.hibernate.model.AccMovement;
 import com.example.hibernate.model.Account;
-import com.example.hibernate.model.Departmento;
+import com.example.hibernate.model.Department;
 import com.example.hibernate.model.Empleado;
 import com.example.hibernate.model.TermDepositAccount;
 
@@ -27,7 +27,7 @@ public class HibernateUtil {
             sessionFactory = new org.hibernate.boot.MetadataSources(serviceRegistry)
                     .addAnnotatedClass(Account.class)
                     .addAnnotatedClass(AccMovement.class)
-                    .addAnnotatedClass(Departmento.class)
+                    .addAnnotatedClass(Department.class)
                     .addAnnotatedClass(Empleado.class)
                     .addAnnotatedClass(TermDepositAccount.class)
                     

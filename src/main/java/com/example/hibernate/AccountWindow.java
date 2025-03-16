@@ -129,7 +129,9 @@ public class AccountWindow extends JFrame {
 
 		btnCrearNuevaAccount.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnCrearNuevaAccount.setBounds(38, 201, 208, 36);
+		btnCrearNuevaAccount.setEnabled(false);
 		panel.add(btnCrearNuevaAccount);
+
 
 		btnModificarImporteCuenta.setEnabled(false);
 		btnModificarImporteCuenta.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -181,13 +183,13 @@ public class AccountWindow extends JFrame {
 
 							AccountWindow.this.empleado = empleadoServicio.find(empno);
 						}
-						nuevaAcc.getEmployees().add(AccountWindow.this.empleado);
+						//nuevaAcc.getEmployees().add(AccountWindow.this.empleado);
 						// setEmp(AccountWindow.this.empleado);
 						JFrame owner = (JFrame) SwingUtilities.getRoot((Component) e.getSource());
 
 						createDialog = new CreateUpdateAccountDialog(owner, "Crear nueva cuenta",
 								Dialog.ModalityType.DOCUMENT_MODAL, nuevaAcc);
-						showDialog(BigDecimal.ZERO);
+4						showDialog(BigDecimal.ZERO);
 					} else {
 						addMensaje(true, "El número de empleado no es correcto");
 					}
@@ -225,7 +227,7 @@ public class AccountWindow extends JFrame {
 					int selectedIx = JListAllAccounts.getSelectedIndex();
 					btnModificarImporteCuenta.setEnabled((selectedIx > -1));
 					btnEliminarCuenta.setEnabled((selectedIx > -1));
-					btnCrearNuevaAccount.setEnabled((selectedIx > -1));
+					//btnCrearNuevaAccount.setEnabled((selectedIx > -1));
 					if (selectedIx > -1) {
 						Account accountd = (Account) JListAllAccounts.getModel().getElementAt(selectedIx);
 						if (accountd != null) {
@@ -292,6 +294,7 @@ public class AccountWindow extends JFrame {
 
 						if (empleado != null) {
 							addMensaje(true, "Se ha encontrado el empleado con id: " + accId);
+							
 						}
 					
 
@@ -309,7 +312,9 @@ public class AccountWindow extends JFrame {
 					}
 					//Cada vez que se cambia el empleado se eliminan las cuentas
 					DefaultListModel<Account> model = (DefaultListModel<Account>) JListAllAccounts.getModel();
-					model.clear(); 
+					model.clear();
+					
+					btnCrearNuevaAccount.setEnabled(empleado!=null);
 				}
 			}
 

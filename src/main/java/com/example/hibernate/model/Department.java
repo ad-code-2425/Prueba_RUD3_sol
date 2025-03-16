@@ -19,7 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name="department"
 )
-public class Departmento  implements java.io.Serializable {
+public class Department  implements java.io.Serializable {
 
 
      private Integer deptno;
@@ -27,10 +27,10 @@ public class Departmento  implements java.io.Serializable {
      private String loc;
      private Set<Empleado> employees = new HashSet<Empleado>(0);
 
-    public Departmento() {
+    public Department() {
     }
 
-    public Departmento(String dname, String loc, Set<Empleado> employees) {
+    public Department(String dname, String loc, Set<Empleado> employees) {
        this.dname = dname;
        this.loc = loc;
        this.employees = employees;
