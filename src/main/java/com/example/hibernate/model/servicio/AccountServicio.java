@@ -80,6 +80,7 @@ public class AccountServicio implements IAccountServicio {
     public Account addAccountToEmployee(int empno, Account acc) {
 
         return accountDao.executarDentroTransaccion(() -> {
+            accountDao.create(acc);
             Empleado empleado = empleadoDao.find(empno);
             // Creamos un método para establecer as relacións bidireccionais
             acc.addTitular(empleado);

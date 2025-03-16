@@ -3,7 +3,6 @@ package com.example.hibernate;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -23,13 +22,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.example.hibernate.model.AccMovement;
 import com.example.hibernate.model.Account;
 import com.example.hibernate.model.Empleado;
 import com.example.hibernate.model.servicio.AccountServicio;
@@ -119,7 +116,9 @@ public class AccountWindow extends JFrame {
 
 		btnModificarImporteCuenta = new JButton("Modificar importe cuenta");
 
-		JListAllAccounts = new JList<Account>();
+		DefaultListModel<Account> model = new DefaultListModel<>();
+
+		JListAllAccounts = new JList<Account>(model);
 
 		JListAllAccounts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -294,8 +293,7 @@ public class AccountWindow extends JFrame {
 						if (empleado != null) {
 							addMensaje(true, "Se ha encontrado el empleado con id: " + accId);
 						}
-						DefaultListModel<Account> model = (DefaultListModel<Account>) JListAllAccounts.getModel();
-						model.clear(); 
+					
 
 					} catch (NumberFormatException nfe) {
 
@@ -309,6 +307,9 @@ public class AccountWindow extends JFrame {
 						AccountWindow.this.empleado = null;
 
 					}
+					//Cada vez que se cambia el empleado se eliminan las cuentas
+					DefaultListModel<Account> model = (DefaultListModel<Account>) JListAllAccounts.getModel();
+					model.clear(); 
 				}
 			}
 
@@ -331,44 +332,44 @@ public class AccountWindow extends JFrame {
 		createDialog.setVisible(true);
 		Account cuentaACrearOActualizar = createDialog.getResult();
 		if (cuentaACrearOActualizar != null) {
-			if (cuentaACrearOActualizar.getAccountno() != null) {
-				// update
-				update(cuentaACrearOActualizar, oldAmount);
-			} else
+			// if (cuentaACrearOActualizar.getAccountno() != null) {
+			// 	// update
+			// 	update(cuentaACrearOActualizar, oldAmount);
+			// } else
 				save(cuentaACrearOActualizar);
 		}
 	}
 
-	private void update(Account cuenta, BigDecimal oldAmount) {
-		addMensaje(true, "La diferencia entre importes es: old:" + oldAmount + " new: " + cuenta.getAmount());
-		BigDecimal diferencia = oldAmount.subtract(cuenta.getAmount());
-		// oldAmount < cantidad actual, diferencia es negativa-> se ha ingresado dinero
-		// +diferencia
-		// oldAmount > cantidad actual, diferencia es positiva-> se ha retirado dinero
-		// -diferencia
-		// si cantidades iguales no hacemos nada
-		// En el movimiento hay que invertir los signos
+	// private void update(Account cuenta, BigDecimal oldAmount) {
+	// 	addMensaje(true, "La diferencia entre importes es: old:" + oldAmount + " new: " + cuenta.getAmount());
+	// 	BigDecimal diferencia = oldAmount.subtract(cuenta.getAmount());
+	// 	// oldAmount < cantidad actual, diferencia es negativa-> se ha ingresado dinero
+	// 	// +diferencia
+	// 	// oldAmount > cantidad actual, diferencia es positiva-> se ha retirado dinero
+	// 	// -diferencia
+	// 	// si cantidades iguales no hacemos nada
+	// 	// En el movimiento hay que invertir los signos
 
-		if (diferencia.compareTo(BigDecimal.ZERO) != 0) {
-			try {
-				AccMovement movimiento = accountServicio.autoTransferir(cuenta.getAccountno(),
-						diferencia.doubleValue() * (-1));
-				getAllAccounts();
-				addMensaje(true, "Se ha creado el movimiento: " + movimiento);
-				// } catch (UnsupportedOperationException e) {
-				// addMensaje(true, "No se puede realizar una transferencia sin variación de
-				// saldo");
-				// } catch (SaldoInsuficienteException e) {
-				// addMensaje(true, "No hay saldo suficiente");
+	// 	if (diferencia.compareTo(BigDecimal.ZERO) != 0) {
+	// 		try {
+	// 			AccMovement movimiento = accountServicio.autoTransferir(cuenta.getAccountno(),
+	// 					diferencia.doubleValue() * (-1));
+	// 			getAllAccounts();
+	// 			addMensaje(true, "Se ha creado el movimiento: " + movimiento);
+	// 			// } catch (UnsupportedOperationException e) {
+	// 			// addMensaje(true, "No se puede realizar una transferencia sin variación de
+	// 			// saldo");
+	// 			// } catch (SaldoInsuficienteException e) {
+	// 			// addMensaje(true, "No hay saldo suficiente");
 
-			} catch (Exception e) {
-				addMensaje(true, "No se ha podido modificar el importe de la cuenta: " + cuenta.getAccountno());
-			}
-		} else {
-			addMensaje(true, "No ha habido variación de cantidad en la cuenta" + cuenta.getAccountno());
-		}
+	// 		} catch (Exception e) {
+	// 			addMensaje(true, "No se ha podido modificar el importe de la cuenta: " + cuenta.getAccountno());
+	// 		}
+	// 	} else {
+	// 		addMensaje(true, "No ha habido variación de cantidad en la cuenta" + cuenta.getAccountno());
+	// 	}
 
-	}
+	// }
 
 	private void save(Account cuenta) {
 		try {

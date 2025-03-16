@@ -8,6 +8,7 @@ import com.example.hibernate.model.AccMovement;
 import com.example.hibernate.model.Account;
 import com.example.hibernate.model.Departmento;
 import com.example.hibernate.model.Empleado;
+import com.example.hibernate.model.TermDepositAccount;
 
 public class HibernateUtil {
 
@@ -28,6 +29,7 @@ public class HibernateUtil {
                     .addAnnotatedClass(AccMovement.class)
                     .addAnnotatedClass(Departmento.class)
                     .addAnnotatedClass(Empleado.class)
+                    .addAnnotatedClass(TermDepositAccount.class)
                     
 
                     .buildMetadata()
