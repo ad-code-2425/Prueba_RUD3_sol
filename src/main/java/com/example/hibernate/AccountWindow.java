@@ -189,7 +189,7 @@ public class AccountWindow extends JFrame {
 
 						createDialog = new CreateUpdateAccountDialog(owner, "Crear nueva cuenta",
 								Dialog.ModalityType.DOCUMENT_MODAL, nuevaAcc);
-4						showDialog(BigDecimal.ZERO);
+						showDialog(BigDecimal.ZERO);
 					} else {
 						addMensaje(true, "El número de empleado no es correcto");
 					}
