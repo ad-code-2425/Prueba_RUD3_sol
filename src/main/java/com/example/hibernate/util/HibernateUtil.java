@@ -6,9 +6,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import com.example.hibernate.model.AccMovement;
 import com.example.hibernate.model.Account;
-import com.example.hibernate.model.Dept;
+import com.example.hibernate.model.Departmento;
 import com.example.hibernate.model.Empleado;
-import com.example.hibernate.model.Project;
 
 public class HibernateUtil {
 
@@ -20,18 +19,17 @@ public class HibernateUtil {
     private HibernateUtil() {
         try {
             // Automatically reads hibernate.properties or hibernate.cfg.xml from classpath
-            serviceRegistry = 
-            new StandardServiceRegistryBuilder()
-						.build();
+            serviceRegistry = new StandardServiceRegistryBuilder()
+                    .build();
 
             // Build SessionFactory using the service registry
             sessionFactory = new org.hibernate.boot.MetadataSources(serviceRegistry)
-                  .addAnnotatedClass(Account.class)
-                  .addAnnotatedClass(AccMovement.class)
-                  .addAnnotatedClass(Dept.class)
-                  .addAnnotatedClass(Empleado.class)
-                  .addAnnotatedClass(Project.class)
-                  
+                    .addAnnotatedClass(Account.class)
+                    .addAnnotatedClass(AccMovement.class)
+                    .addAnnotatedClass(Departmento.class)
+                    .addAnnotatedClass(Empleado.class)
+                    
+
                     .buildMetadata()
                     .buildSessionFactory();
         } catch (Exception ex) {

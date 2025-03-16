@@ -19,18 +19,18 @@ import java.util.Set;
 @Entity
 @Table(name="department"
 )
-public class Department  implements java.io.Serializable {
+public class Departmento  implements java.io.Serializable {
 
 
      private Integer deptno;
      private String dname;
      private String loc;
-     private Set<Employee> employees = new HashSet<Employee>(0);
+     private Set<Empleado> employees = new HashSet<Empleado>(0);
 
-    public Department() {
+    public Departmento() {
     }
 
-    public Department(String dname, String loc, Set<Employee> employees) {
+    public Departmento(String dname, String loc, Set<Empleado> employees) {
        this.dname = dname;
        this.loc = loc;
        this.employees = employees;
@@ -69,11 +69,11 @@ public class Department  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="department")
-    public Set<Employee> getEmployees() {
+    public Set<Empleado> getEmployees() {
         return this.employees;
     }
     
-    public void setEmployees(Set<Employee> employees) {
+    public void setEmployees(Set<Empleado> employees) {
         this.employees = employees;
     }
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.hibernate.model.AccMovement;
 import com.example.hibernate.model.Account;
+import com.example.hibernate.model.Empleado;
 
 public interface IAccountServicio {
 
@@ -16,5 +17,9 @@ public interface IAccountServicio {
     public List<Account> getAccountsByEmpno(Integer empno);
 
     public void delete(Integer accountno);
+
+    public Account addAccountToEmployee(int empno, Account acc);
+	
+	public List<Empleado> getTitularesByAccountId(int accId);
 
 }

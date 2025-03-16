@@ -8,6 +8,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -21,12 +23,13 @@ import java.util.Set;
 @Entity
 @Table(name="account"
 )
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Account  implements java.io.Serializable {
 
 
      private Integer accountno;
      private BigDecimal amount;
-     private Set<Employee> employees = new HashSet<Employee>(0);
+     private Set<Empleado> employees = new HashSet<Empleado>(0);
      private Set<AccMovement> accMovementsForAccountDestId = new HashSet<AccMovement>(0);
      private Set<AccMovement> accMovementsForAccountOriginId = new HashSet<AccMovement>(0);
 
@@ -37,7 +40,7 @@ public class Account  implements java.io.Serializable {
     public Account(BigDecimal amount) {
         this.amount = amount;
     }
-    public Account(BigDecimal amount, Set<Employee> employees, Set<AccMovement> accMovementsForAccountDestId, Set<AccMovement> accMovementsForAccountOriginId) {
+    public Account(BigDecimal amount, Set<Empleado> employees, Set<AccMovement> accMovementsForAccountDestId, Set<AccMovement> accMovementsForAccountOriginId) {
        this.amount = amount;
        this.employees = employees;
        this.accMovementsForAccountDestId = accMovementsForAccountDestId;
@@ -67,15 +70,15 @@ public class Account  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.LAZY, mappedBy="accounts")
-    public Set<Employee> getEmployees() {
+    public Set<Empleado> getEmployees() {
         return this.employees;
     }
     
-    public void setEmployees(Set<Employee> employees) {
+    public void setEmployees(Set<Empleado> employees) {
         this.employees = employees;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="accountByAccountDestId")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="accountDestino")
     public Set<AccMovement> getAccMovementsForAccountDestId() {
         return this.accMovementsForAccountDestId;
     }
@@ -84,16 +87,25 @@ public class Account  implements java.io.Serializable {
         this.accMovementsForAccountDestId = accMovementsForAccountDestId;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="accountByAccountOriginId")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="accountOrigen")
     public Set<AccMovement> getAccMovementsForAccountOriginId() {
         return this.accMovementsForAccountOriginId;
     }
     
+    @Override
+public String toString() {
+    return "Account [accountno=" + accountno + ", amount=" + amount + "]";
+}
+
+
     public void setAccMovementsForAccountOriginId(Set<AccMovement> accMovementsForAccountOriginId) {
         this.accMovementsForAccountOriginId = accMovementsForAccountOriginId;
     }
 
-
+    public void addTitular(Empleado empleado) {
+        this.getEmployees().add(empleado);
+        empleado.getAccounts().add(this);
+}
 
 
 }

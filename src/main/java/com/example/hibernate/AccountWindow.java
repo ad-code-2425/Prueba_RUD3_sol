@@ -3,6 +3,7 @@ package com.example.hibernate;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -22,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -133,20 +135,24 @@ public class AccountWindow extends JFrame {
 		btnModificarImporteCuenta.setEnabled(false);
 		btnModificarImporteCuenta.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnModificarImporteCuenta.setBounds(38, 266, 208, 36);
-		panel.add(btnModificarImporteCuenta);
+		//panel.add(btnModificarImporteCuenta);
 
 		btnEliminarCuenta = new JButton("Eliminar cuenta");
 
 		btnEliminarCuenta.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnEliminarCuenta.setEnabled(false);
 		btnEliminarCuenta.setBounds(38, 342, 208, 36);
-		panel.add(btnEliminarCuenta);
+		//panel.add(btnEliminarCuenta);
 
-		lblEmpno = new JLabel("Introduzca el nº de empleado");
-		lblEmpno.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblEmpno.setBounds(35, 37, 243, 31);
+		lblEmpno = new JLabel("Introduzca el nº de empleado y luego presione la tecla ENTER");
+		lblEmpno.setFont(new Font("Tahoma", Font.PLAIN, 12));
+
+		lblEmpno.setBounds(35, 37, 500, 31);
 		panel.add(lblEmpno);
 
+		
+
+		panel.add(lblEmpno);
 		JtextFieldEmpno = new JTextField();
 		JtextFieldEmpno.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		JtextFieldEmpno.setBounds(38, 77, 136, 36);
@@ -176,8 +182,8 @@ public class AccountWindow extends JFrame {
 
 							AccountWindow.this.empleado = empleadoServicio.find(empno);
 						}
-						// Establezco la relación entre la nueva Account y el empleado
-						nuevaAcc.setEmp(AccountWindow.this.empleado);
+						nuevaAcc.getEmployees().add(AccountWindow.this.empleado);
+						// setEmp(AccountWindow.this.empleado);
 						JFrame owner = (JFrame) SwingUtilities.getRoot((Component) e.getSource());
 
 						createDialog = new CreateUpdateAccountDialog(owner, "Crear nueva cuenta",
@@ -187,7 +193,8 @@ public class AccountWindow extends JFrame {
 						addMensaje(true, "El número de empleado no es correcto");
 					}
 				} catch (Exception ex) {
-					addMensaje(true, "El empno " + empno + " no se encontró");
+
+					addMensaje(true, "No se ha podido recuperar el empleado con nº " + empno);
 				}
 			}
 		};
@@ -197,7 +204,6 @@ public class AccountWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIx = JListAllAccounts.getSelectedIndex();
 				if (selectedIx > -1) {
-					// Estas cuentas ya vienen con un proxy de su empleado y con su empno
 					Account account = (Account) JListAllAccounts.getModel().getElementAt(selectedIx);
 					if (account != null) {
 
@@ -220,11 +226,26 @@ public class AccountWindow extends JFrame {
 					int selectedIx = JListAllAccounts.getSelectedIndex();
 					btnModificarImporteCuenta.setEnabled((selectedIx > -1));
 					btnEliminarCuenta.setEnabled((selectedIx > -1));
-
+					btnCrearNuevaAccount.setEnabled((selectedIx > -1));
 					if (selectedIx > -1) {
 						Account accountd = (Account) JListAllAccounts.getModel().getElementAt(selectedIx);
 						if (accountd != null) {
-							addMensaje(true, "Se ha seleccionado la cuenta con id: " + accountd);
+							addMensaje(true, "Se ha seleccionado el d: " + accountd);
+							try {
+								List<Empleado> titulares = accountServicio
+										.getTitularesByAccountId(accountd.getAccountno());
+								addMensaje(true,
+										"Los titulares de la cuenta con accid: " + accountd.getAccountno() + " son:\n");
+								for (Empleado empleado : titulares) {
+									addMensaje(true, "     " + empleado.getEmpno() + "\n");
+								}
+
+							} catch (Exception ex) {
+								addMensaje(true, "No se ha podido obtener los titulares de la cuenta.con id: " +
+										accountd.getAccountno());
+								System.out.println("Exception: " + ex.getMessage());
+								ex.printStackTrace();
+							}
 						}
 					}
 				}
@@ -267,19 +288,20 @@ public class AccountWindow extends JFrame {
 					textIntroducido = ((JTextField) e.getSource()).getText().trim();
 					try {
 						int accId = Integer.parseInt(textIntroducido);
-						// Se guarda en un atributo de la clase
+
 						AccountWindow.this.empleado = empleadoServicio.find(accId);
 
 						if (empleado != null) {
 							addMensaje(true, "Se ha encontrado el empleado con id: " + accId);
 						}
+						DefaultListModel<Account> model = (DefaultListModel<Account>) JListAllAccounts.getModel();
+						model.clear(); 
 
 					} catch (NumberFormatException nfe) {
 
 						addMensaje(true, "Introduzca un número entero");
 						AccountWindow.this.empleado = null;
 
-				
 					} catch (Exception ex) {
 						System.out.println("Ha ocurrido una excepción: " + ex.getMessage());
 						addMensaje(true, "Ha ocurrido un error y no se ha podido recuperar el empleado con id: "
@@ -331,14 +353,16 @@ public class AccountWindow extends JFrame {
 			try {
 				AccMovement movimiento = accountServicio.autoTransferir(cuenta.getAccountno(),
 						diferencia.doubleValue() * (-1));
-				
 				getAllAccounts();
 				addMensaje(true, "Se ha creado el movimiento: " + movimiento);
+				// } catch (UnsupportedOperationException e) {
+				// addMensaje(true, "No se puede realizar una transferencia sin variación de
+				// saldo");
+				// } catch (SaldoInsuficienteException e) {
+				// addMensaje(true, "No hay saldo suficiente");
 
-		
-			} catch (Exception e2) {
-				addMensaje(true, "No se ha podido modificar la cuenta con número: " + cuenta.getAccountno());
-
+			} catch (Exception e) {
+				addMensaje(true, "No se ha podido modificar el importe de la cuenta: " + cuenta.getAccountno());
 			}
 		} else {
 			addMensaje(true, "No ha habido variación de cantidad en la cuenta" + cuenta.getAccountno());
@@ -348,11 +372,13 @@ public class AccountWindow extends JFrame {
 
 	private void save(Account cuenta) {
 		try {
-			 accountServicio.crear(cuenta);
-		
-				addMensaje(true, "Se ha creado una cuenta con id: " + cuenta.getAccountno());
+			Account nuevo = accountServicio.addAccountToEmployee(this.empleado.getEmpno(), cuenta);
+			if (nuevo != null) {
+				addMensaje(true, "Se ha creado una cuenta con id: " + nuevo.getAccountno());
 				getAllAccounts();
-			
+			} else {
+				addMensaje(true, " La cuenta no se ha creado/actualizado correctamente");
+			}
 
 		} catch (Exception ex) {
 			addMensaje(true, "Ha ocurrido un error y no se ha podido crear la cuenta");
@@ -362,17 +388,13 @@ public class AccountWindow extends JFrame {
 	private void getAllAccounts() {
 		int empno = getEmpnoFromTextField();
 		if (empno != -1) {
-			try {
-				List<Account> accounts = accountServicio.getAccountsByEmpno(empno);
-				addMensaje(true, "Se han recuperado: " + accounts.size() + " cuentas");
-				DefaultListModel<Account> defModel = new DefaultListModel<>();
+			List<Account> accounts = accountServicio.getAccountsByEmpno(empno);
+			addMensaje(true, "Se han recuperado: " + accounts.size() + " cuentas");
+			DefaultListModel<Account> defModel = new DefaultListModel<>();
 
-				defModel.addAll(accounts);
+			defModel.addAll(accounts);
 
-				JListAllAccounts.setModel(defModel);
-			} catch (Exception ex) {
-				addMensaje(true, "Ha habido un error y no se han podido recuperar las cuentas del empleado: " + empno);
-			}
+			JListAllAccounts.setModel(defModel);
 		} else {
 			addMensaje(true, "El número de empleado no es correcto");
 		}
