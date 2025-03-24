@@ -31,7 +31,7 @@
                         <version>9.1.0</version>
                     </dependency>
                 </dependencies>
-                <!-- <executions>
+                 <executions>
                     <execution>
                         <id>entity-generation</id>
                         <phase>generate-sources</phase>
@@ -46,7 +46,7 @@
                             <outputDirectory>src/main/java</outputDirectory>
                         </configuration>
                     </execution>
-                </executions> -->
+                </executions> 
 
             </plugin>
         </plugins>
