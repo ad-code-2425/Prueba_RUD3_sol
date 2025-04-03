@@ -5,6 +5,7 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(name="account_id")
+@Table (name = "TERM_DEPOSIT_ACCOUNT")
 public class TermDepositAccount extends Account{
     
     private float interes;
