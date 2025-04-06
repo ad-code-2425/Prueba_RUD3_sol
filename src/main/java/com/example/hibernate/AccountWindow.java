@@ -254,7 +254,7 @@ public class AccountWindow extends JFrame {
 		};
 		JListAllAccounts.addListSelectionListener(selectionListListener);
 
-		ActionListener deleteListener = new ActionListener() {
+	/*	ActionListener deleteListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIx = JListAllAccounts.getSelectedIndex();
 				if (selectedIx > -1) {
@@ -276,6 +276,7 @@ public class AccountWindow extends JFrame {
 			}
 		};
 		btnEliminarCuenta.addActionListener(deleteListener);
+		*/
 
 		KeyAdapter enterKeyAdapter = new KeyAdapter() {
 			@Override
