@@ -6,6 +6,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import com.example.hibernate.model.Author;
 import com.example.hibernate.model.Book;
+import com.example.hibernate.model.EBook;
 import com.example.hibernate.model.Publisher;
 
 public class HibernateUtil {
@@ -23,12 +24,11 @@ public class HibernateUtil {
 
             // Build SessionFactory using the service registry
             sessionFactory = new org.hibernate.boot.MetadataSources(serviceRegistry)
-                
+
                     .addAnnotatedClass(Book.class)
                     .addAnnotatedClass(Author.class)
                     .addAnnotatedClass(Publisher.class)
-                 
-            
+                    .addAnnotatedClass(EBook.class)
 
                     .buildMetadata()
                     .buildSessionFactory();

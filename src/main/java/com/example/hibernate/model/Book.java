@@ -7,6 +7,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -23,6 +25,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "books")
+@Inheritance(strategy =InheritanceType.JOINED)
 public class Book implements java.io.Serializable {
 
     private Integer bookId;

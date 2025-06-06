@@ -297,7 +297,7 @@ public class BookWindow extends JFrame {
 
 					Author authorCreated = bookServicio.addAuthorToBook(book.getBookId(), author);
 					if (authorCreated != null) {
-						addMensaje(true, "Se ha añadido un author " + authorCreated.getAuthorId() + " al libro con id: "
+						addMensaje(true, "Se ha añadido un author " + authorCreated.getAuthorId()+ " al libro con id: "
 								+ book.getBookId());
 						getAllBooks();
 					} else {
