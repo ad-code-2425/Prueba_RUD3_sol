@@ -4,11 +4,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-import com.example.hibernate.model.AccMovement;
-import com.example.hibernate.model.Account;
-import com.example.hibernate.model.Department;
-import com.example.hibernate.model.Empleado;
-import com.example.hibernate.model.TermDepositAccount;
+import com.example.hibernate.model.Author;
+import com.example.hibernate.model.Book;
+import com.example.hibernate.model.Publisher;
 
 public class HibernateUtil {
 
@@ -25,12 +23,12 @@ public class HibernateUtil {
 
             // Build SessionFactory using the service registry
             sessionFactory = new org.hibernate.boot.MetadataSources(serviceRegistry)
-                    .addAnnotatedClass(Account.class)
-                    .addAnnotatedClass(AccMovement.class)
-                    .addAnnotatedClass(Department.class)
-                    .addAnnotatedClass(Empleado.class)
-                    .addAnnotatedClass(TermDepositAccount.class)
-                    
+                
+                    .addAnnotatedClass(Book.class)
+                    .addAnnotatedClass(Author.class)
+                    .addAnnotatedClass(Publisher.class)
+                 
+            
 
                     .buildMetadata()
                     .buildSessionFactory();
